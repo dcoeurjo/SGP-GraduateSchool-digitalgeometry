@@ -75,13 +75,18 @@ void registerDTSlice(const Image& image, const Domain &domain,
 }
 
 
+bool toggle=false;
+int cpt=0;
 
 void myCallback()
 {
+  ++cpt;
   ImGui::SliderInt("Slice", &slice, binary_image->domain().lowerBound()[0], binary_image->domain().upperBound()[0]);
   ImGui::RadioButton("X axis", &axis, 0); ImGui::SameLine();
   ImGui::RadioButton("Y axis", &axis, 1); ImGui::SameLine();
   ImGui::RadioButton("Z axis", &axis, 2);
+  
+  
   
   ImGui::Checkbox("Outside DT", &negate);
   if (ImGui::Button("Update slice dt"))
@@ -121,6 +126,17 @@ void myCallback()
     auto psrdma = polyscope::registerPointCloud("RDMA", centers);
     auto q= psrdma->addScalarQuantity("radius", radii);
     psrdma->setPointRadiusQuantity(q,false);
+  }
+  
+  if (ImGui::Button("Toggle"))
+    toggle = !toggle;
+  
+  if((toggle) )//&& (cpt%2==1))
+  {
+    slice++;
+    if (slice > binary_image->domain().upperBound()[axis])
+      slice = binary_image->domain().lowerBound()[axis];
+    registerDTSlice(*voronoiMapOutside, binary_image->domain(), slice,axis, false);
   }
 }
 
