@@ -9,6 +9,7 @@
 #include <DGtal/images/SimpleThresholdForegroundPredicate.h>
 #include <DGtal/geometry/volumes/distance/DistanceTransformation.h>
 #include <DGtal/geometry/volumes/distance/VoronoiMap.h>
+#include <DGtal/geometry/volumes/distance/ReducedMedialAxis.h>
 
 #include "polyscope/polyscope.h"
 #include "polyscope/point_cloud.h"
@@ -33,8 +34,12 @@ typedef functors::SimpleThresholdForegroundPredicate<SH3::BinaryImage> Predicate
 typedef DistanceTransformation< Z3i::Space, Predicate, Z3i::L2Metric> DT;
 typedef DistanceTransformation< Z3i::Space, functors::NotPointPredicate<Predicate>, Z3i::L2Metric>  DTOUTSIDE;
 
-DT *distancemap_inside;
-DTOUTSIDE *distancemap_outside;
+typedef VoronoiMap< Z3i::Space, Predicate, Z3i::L2Metric> VoroMap;
+typedef VoronoiMap< Z3i::Space, functors::NotPointPredicate<Predicate>, Z3i::L2Metric>  VoroMapOutside;
+
+
+VoroMap *voronoiMap;
+VoroMapOutside *voronoiMapOutside;
 
 
 template<typename Image>
@@ -43,23 +48,29 @@ void registerDTSlice(const Image& image, const Domain &domain,
 {
   std::vector<Point> grid;
   std::vector<double> values;
+  std::vector<unsigned int> sites;
+    Point p;
   for(auto y = domain.lowerBound()[1]; y <= domain.upperBound()[1] ; ++y )
     for(auto z = domain.lowerBound()[2]; z <= domain.upperBound()[2] ; ++z )
     {
-      double val;
       switch (axis) {
-        case 0:
-          val =image(Point(slice, y, z));grid.push_back(Point(slice, y, z));
-          break;
-        case 1: val=image(Point(y,slice, z));grid.push_back(Point(y,slice, z));break;
-        case 2: val = image(Point(y, z, slice));grid.push_back(Point(y,z,slice));break;
+        case 0: p=Point(slice, y, z);break;
+        case 1: p=Point(y,slice, z);break;
+        case 2: p=Point(y, z, slice);break;
         default:
           break;
       }
-      values.push_back(val);
+      Point q = image(p);
+      grid.push_back(p);  //Grid
+      if (p==q)
+        sites.push_back(0);
+      else
+        sites.push_back(13*(q[0] + q[1]*451 + q[2]*311) % 1024); //Voronoi cells
+      values.push_back((p-q).norm()); //Distance
     }
   auto pspcl= polyscope::registerPointCloud("Slice", grid);
   auto q=pspcl->addScalarQuantity("DT values", values);
+  pspcl->addScalarQuantity("Sittes", sites);
   if (inner) //For inner balls, we display them with non scaled radius
     pspcl->setPointRadiusQuantity(q,false);
 }
@@ -79,9 +90,14 @@ void myCallback()
     //DT
     Z3i::L2Metric l2;
     if (negate)
-      registerDTSlice(*distancemap_outside, binary_image->domain(), slice,axis, false);
+      registerDTSlice(*voronoiMapOutside, binary_image->domain(), slice,axis, false);
     else
-      registerDTSlice(*distancemap_inside, binary_image->domain(), slice,axis,true);
+      registerDTSlice(*voronoiMap, binary_image->domain(), slice,axis,true);
+  }
+  
+  if (ImGui::Button("RDMA"))
+  {
+     
   }
 }
 
@@ -124,8 +140,8 @@ int main(int argc, char **argv)
   //Preparing predicates
   Predicate binaryshape(*binary_image, 0);
   functors::NotPointPredicate<Predicate> negpred(binaryshape);
-  distancemap_inside = new DT(binary_image->domain(), binaryshape, Z3i::l2Metric);
-  distancemap_outside = new DTOUTSIDE(binary_image->domain(), negpred, Z3i::l2Metric);
+  voronoiMap = new VoroMap(binary_image->domain(), binaryshape, Z3i::l2Metric);
+  voronoiMapOutside = new VoroMapOutside(binary_image->domain(), negpred, Z3i::l2Metric);
   
   polyscope::state::userCallback = myCallback;
   polyscope::show();
