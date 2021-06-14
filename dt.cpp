@@ -37,7 +37,6 @@ typedef DistanceTransformation< Z3i::Space, functors::NotPointPredicate<Predicat
 typedef VoronoiMap< Z3i::Space, Predicate, Z3i::L2Metric> VoroMap;
 typedef VoronoiMap< Z3i::Space, functors::NotPointPredicate<Predicate>, Z3i::L2Metric>  VoroMapOutside;
 
-
 VoroMap *voronoiMap;
 VoroMapOutside *voronoiMapOutside;
 
@@ -61,16 +60,16 @@ void registerDTSlice(const Image& image, const Domain &domain,
           break;
       }
       Point q = image(p);
-      grid.push_back(p);  //Grid
-      if (p==q)
-        sites.push_back(0);
-      else
+      if (p!=q)
+      {
+        grid.push_back(p);  //Grid
         sites.push_back(13*(q[0] + q[1]*451 + q[2]*311) % 1024); //Voronoi cells
-      values.push_back((p-q).norm()); //Distance
+        values.push_back((p-q).norm()); //Distance
+      }
     }
   auto pspcl= polyscope::registerPointCloud("Slice", grid);
   auto q=pspcl->addScalarQuantity("DT values", values);
-  pspcl->addScalarQuantity("Sittes", sites);
+  pspcl->addScalarQuantity("Sites", sites);
   if (inner) //For inner balls, we display them with non scaled radius
     pspcl->setPointRadiusQuantity(q,false);
 }
@@ -97,7 +96,31 @@ void myCallback()
   
   if (ImGui::Button("RDMA"))
   {
-     
+    ImageContainerBySTLVector<Domain, uint64_t> squareDT(binary_image->domain());
+    for(auto p: binary_image->domain())
+    {
+      auto q = voronoiMap->operator()(p);
+      if (p!=q)
+      {
+        squareDT.setValue(p, (p-q).squaredNorm());
+      }
+    }
+    typedef PowerMap<ImageContainerBySTLVector<Domain, uint64_t>, L2PowerMetric> PowerMapType;
+    PowerMapType powermap(binary_image->domain(), squareDT, Z3i::l2PowerMetric);
+    auto rdma = ReducedMedialAxis<PowerMapType>::getReducedMedialAxisFromPowerMap(powermap);
+    std::vector<Point> centers;
+    std::vector<double> radii;
+    for(auto &p: rdma.domain())
+    {
+      if (rdma(p) != 0)
+      {
+        centers.push_back(p);
+        radii.push_back(std::sqrt(rdma(p)) - 0.5);
+      }
+    }
+    auto psrdma = polyscope::registerPointCloud("RDMA", centers);
+    auto q= psrdma->addScalarQuantity("radius", radii);
+    psrdma->setPointRadiusQuantity(q,false);
   }
 }
 
