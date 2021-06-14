@@ -31,10 +31,15 @@ CountedPtr<SH3::BinaryImage> binary_image;
 
 typedef functors::SimpleThresholdForegroundPredicate<SH3::BinaryImage> Predicate;
 typedef DistanceTransformation< Z3i::Space, Predicate, Z3i::L2Metric> DT;
+typedef DistanceTransformation< Z3i::Space, functors::NotPointPredicate<Predicate>, Z3i::L2Metric>  DTOUTSIDE;
+
+DT *distancemap_inside;
+DTOUTSIDE *distancemap_outside;
 
 
 template<typename Image>
-void registerDTSlice(const Image& image, const Domain &domain, Z3i::Integer slice, size_t axis, bool inner)
+void registerDTSlice(const Image& image, const Domain &domain,
+                     Z3i::Integer slice, size_t axis, bool inner)
 {
   std::vector<Point> grid;
   std::vector<double> values;
@@ -55,7 +60,7 @@ void registerDTSlice(const Image& image, const Domain &domain, Z3i::Integer slic
     }
   auto pspcl= polyscope::registerPointCloud("Slice", grid);
   auto q=pspcl->addScalarQuantity("DT values", values);
-  if (inner)
+  if (inner) //For inner balls, we display them with non scaled radius
     pspcl->setPointRadiusQuantity(q,false);
 }
 
@@ -64,24 +69,19 @@ void registerDTSlice(const Image& image, const Domain &domain, Z3i::Integer slic
 void myCallback()
 {
   ImGui::SliderInt("Slice", &slice, binary_image->domain().lowerBound()[0], binary_image->domain().upperBound()[0]);
-  ImGui::SliderInt("Axis", &axis, 0,2);
+  ImGui::RadioButton("X axis", &axis, 0); ImGui::SameLine();
+  ImGui::RadioButton("Y axis", &axis, 1); ImGui::SameLine();
+  ImGui::RadioButton("Z axis", &axis, 2);
+  
   ImGui::Checkbox("Outside DT", &negate);
   if (ImGui::Button("Update slice dt"))
   {
     //DT
     Z3i::L2Metric l2;
-    Predicate binaryshape(*binary_image, 0);
     if (negate)
-    {
-      functors::NotPointPredicate<Predicate> negpred(binaryshape);
-      DistanceTransformation< Z3i::Space, functors::NotPointPredicate<Predicate>, Z3i::L2Metric>  distancemap(binary_image->domain(), negpred, l2);
-      registerDTSlice(distancemap, binary_image->domain(), slice,axis, false);
-    }
+      registerDTSlice(*distancemap_outside, binary_image->domain(), slice,axis, false);
     else
-    {
-      DT distancemap(binary_image->domain(), binaryshape, l2);
-      registerDTSlice(distancemap, binary_image->domain(), slice,axis,true);
-    }
+      registerDTSlice(*distancemap_inside, binary_image->domain(), slice,axis,true);
   }
 }
 
@@ -120,6 +120,12 @@ int main(int argc, char **argv)
     faces.push_back(face);
   }
   auto primalSurf = polyscope::registerSurfaceMesh("Primal surface",positions, faces)->setEdgeWidth(1.0)->setEdgeColor({1.,1.,1.});
+
+  //Preparing predicates
+  Predicate binaryshape(*binary_image, 0);
+  functors::NotPointPredicate<Predicate> negpred(binaryshape);
+  distancemap_inside = new DT(binary_image->domain(), binaryshape, Z3i::l2Metric);
+  distancemap_outside = new DTOUTSIDE(binary_image->domain(), negpred, Z3i::l2Metric);
   
   polyscope::state::userCallback = myCallback;
   polyscope::show();
