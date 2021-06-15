@@ -5,7 +5,7 @@ the
 [Graduate School](https://sgp2021.github.io/program/#graduate-school) of the
 [Symposium on Geometry Processing](https://sgp2021.github.io).
 
-![](img/bunny-geodeiscs.png)
+![](https://raw.githubusercontent.com/dcoeurjo/SGP-GraduateSchool-digitalgeometry/main/img/bunny-geodesics.png)
 
 
 # How to build the examples
