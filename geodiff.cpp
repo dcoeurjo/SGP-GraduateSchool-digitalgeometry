@@ -22,51 +22,65 @@ using namespace Z3i;
 typedef Shortcuts<Z3i::KSpace>         SH3;
 typedef ShortcutsGeometry<Z3i::KSpace> SHG3;
 
-
 bool toggle=false;
 int cpt=0;
 bool screenshots=false;
 
-CountedPtr<SH3::BinaryImage> binary_image;
-CountedPtr<SH3::DigitalSurface > surface;
-SH3::KSpace K;
-SH3::SurfelRange surfels;
-Parameters params;
-polyscope::SurfaceMesh *digsurf;
-float rad=1.0;
 
-void oneStep(double rad)
+void oneStep(double h)
 {
+  auto params = SH3::defaultParameters() | SHG3::defaultParameters() |  SHG3::parametersGeometryEstimation();
+  params( "polynomial", "goursat" )( "gridstep", h );
+  auto implicit_shape  = SH3::makeImplicitShape3D  ( params );
+  auto digitized_shape = SH3::makeDigitizedImplicitShape3D( implicit_shape, params );
+  auto K               = SH3::getKSpace( params );
+  auto binary_image    = SH3::makeBinaryImage( digitized_shape, params );
+  auto surface         = SH3::makeDigitalSurface( binary_image, K, params );
+  auto embedder        = SH3::getCellEmbedder( K );
+  SH3::Cell2Index c2i;
+  auto surfels         = SH3::getSurfelRange( surface, params );
+  auto primalSurface   = SH3::makePrimalPolygonalSurface(c2i, surface);
+  
+  //Need to convert the faces
+  std::vector<std::vector<std::size_t>> faces;
+  for(auto &face: primalSurface->allFaces())
+    faces.push_back(primalSurface->verticesAroundFace( face ));
+  auto digsurf = polyscope::registerSurfaceMesh("Primal surface", primalSurface->positions(), faces);
+  digsurf->rescaleToUnit();
+  digsurf->setEdgeWidth(h*h);  //fade-out
+  digsurf->setEdgeColor({1.,1.,1.});
+  
   //Computing some differential quantities
-  params("r-radius", rad);
-  auto normalsII = SHG3::getIINormalVectors(binary_image, surfels, params);
+  params("r-radius", 5*std::pow(h,-2.0/3.0));
+  //auto normalsII = SHG3::getIINormalVectors(binary_image, surfels, params);
   auto Mcurv     = SHG3::getIIMeanCurvatures(binary_image, surfels, params);
   
   //Attaching quantities
-  digsurf->addFaceVectorQuantity("II normal vectors", normalsII);
+ /// digsurf->addFaceVectorQuantity("II normal vectors", normalsII);
   digsurf->addFaceScalarQuantity("II mean curvature", Mcurv);
 }
 
-float drad=0.1;
+float h=1.0;
+float dh=0.01;
 void myCallback()
 {
   ++cpt;
   
-  ImGui::SliderFloat("radius", &rad, 1.0, 10.0);
-  ImGui::SliderFloat("deltaradius", &drad, 0.0, 1.0);
+  ImGui::SliderFloat("h", &h, 0.001, 1.0);
+  ImGui::SliderFloat("deltaradius", &dh, 0.0, 1.0);
   ImGui::Checkbox("Screenshots",&screenshots);
   if (ImGui::Button("Go"))
-    oneStep(rad);
+    oneStep(h);
   
   if (ImGui::Button("Toggle"))
     toggle = !toggle;
   
   if((toggle) )//&& (cpt%2==1))
   {
-    oneStep(rad);
-    rad+=drad;
-    if (rad>10.0)     toggle = !toggle;
-
+    oneStep(h);
+    h-=dh;
+    if (h<0.0001)     toggle = !toggle;
+    
     if (screenshots)
       polyscope::screenshot();
   }
@@ -77,34 +91,6 @@ int main(int argc, char **argv)
 {
   polyscope::init();
   
-  CLI::App app{"DT demo"};
-  std::string filename;
-  app.add_option("-i,--input,1", filename, "Input VOL file")->required()->check(CLI::ExistingFile);
-  CLI11_PARSE(app,argc,argv);
-  
-  params = SH3::defaultParameters() | SHG3::defaultParameters() |  SHG3::parametersGeometryEstimation();
-  binary_image = SH3::makeBinaryImage(filename, params );
-  K            = SH3::getKSpace( binary_image );
-  surface      = SH3::makeDigitalSurface( binary_image, K, params );
-  surfels      = SH3::getSurfelRange( surface, params );
-  auto embedder     = SH3::getCellEmbedder( K );
-  
-  //Need to convert the faces
-  std::vector<std::vector<size_t>> faces;
-  std::vector<RealPoint> positions;
-  unsigned int cpt=0;
-  for(auto &surfel: surfels)
-  {
-    auto verts = SH3::getPrimalVertices(K, surfel, false );
-    for(auto &v: verts)
-      positions.push_back(embedder(v));
-    
-    std::vector<size_t> face={cpt, cpt+1, cpt+2,cpt+3};
-    cpt+=4;
-    faces.push_back(face);
-  }
-  digsurf = polyscope::registerSurfaceMesh("Primal",positions, faces)->setEdgeWidth(1.0)->setEdgeColor({1.,1.,1.});
-
   polyscope::state::userCallback = myCallback;
   polyscope::show();
   return 0;
