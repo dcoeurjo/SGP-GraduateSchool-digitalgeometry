@@ -54,6 +54,7 @@ void myCallback()
   
   ImGui::SliderFloat("radius", &rad, 1.0, 10.0);
   ImGui::SliderFloat("deltaradius", &drad, 0.0, 1.0);
+  ImGui::Checkbox("Screenshots",&screenshots);
   if (ImGui::Button("Go"))
     oneStep(rad);
   

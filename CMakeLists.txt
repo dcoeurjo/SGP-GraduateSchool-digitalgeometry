@@ -13,7 +13,8 @@ include_directories("${DGTAL_INCLUDE_DIRS}")
 set(SRCs
    simpleTest
    dt
-   quickhull)
+   quickhull
+   geodiff)
 
 foreach(src ${SRCs})
   add_executable(${src} ${src}.cpp)
