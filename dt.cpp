@@ -118,6 +118,7 @@ void registerSlice(const Image& image, const Domain &domain,
 
 bool toggle=false;
 int cpt=0;
+bool screenshots=false;
 
 void myCallback()
 {
@@ -128,6 +129,7 @@ void myCallback()
   ImGui::RadioButton("Z axis", &axis, 2);
   
   ImGui::Checkbox("Outside DT", &negate);
+  ImGui::Checkbox("Screenshots", &screenshots);
   ImGui::Checkbox("SubSample (for OpenGL prefs)", &subSample);
   if (ImGui::Button("Update slice dt"))
   {
@@ -175,7 +177,14 @@ void myCallback()
     if (slice > binary_image->domain().upperBound()[axis])
       slice = binary_image->domain().lowerBound()[axis];
     registerSlice(*voronoiMapOutside, binary_image->domain(), slice,axis, false,subSample);
+  
+    if (screenshots)
+      polyscope::screenshot();
   }
+  
+  
+  
+  
 }
 
 int main(int argc, char **argv)

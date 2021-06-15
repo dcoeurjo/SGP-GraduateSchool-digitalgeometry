@@ -57,7 +57,7 @@ void oneStep(double myh)
   polyscope::registerSurfaceMesh("Convex hull", positions, facets)->rescaleToUnit();
 }
 
-float deltah;
+float deltah=0.005;
 void mycallback()
 {
   ImGui::SliderFloat("h", &h, 0.0, 0.5);
@@ -68,7 +68,7 @@ void mycallback()
   }
   if (ImGui::Button("Screenshots"))
   {
-    for(auto hh=h; hh > 0.02; hh=hh-deltah)
+    for(auto hh=h; hh > 0.01; hh=hh-deltah)
     {
       oneStep(hh);
       polyscope::screenshot();
