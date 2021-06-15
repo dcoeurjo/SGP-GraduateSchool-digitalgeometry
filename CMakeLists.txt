@@ -12,7 +12,8 @@ include_directories("${DGTAL_INCLUDE_DIRS}")
 
 set(SRCs
    simpleTest
-   dt)
+   dt
+   quickhull)
 
 foreach(src ${SRCs})
   add_executable(${src} ${src}.cpp)
