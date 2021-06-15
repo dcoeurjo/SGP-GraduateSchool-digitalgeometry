@@ -117,6 +117,7 @@ void registerSlice(const Image& image, const Domain &domain,
 
 
 bool toggle=false;
+bool toggle1D=false;
 int cpt=0;
 bool screenshots=false;
 
@@ -182,7 +183,19 @@ void myCallback()
       polyscope::screenshot();
   }
   
+  if (ImGui::Button("Toggle 1D"))
+    toggle1D = !toggle1D;
   
+  if((toggle1D) )//&& (cpt%2==1))
+  {
+    slice++;
+    if (slice > binary_image->domain().upperBound()[axis])
+      toggle1D = !toggle1D;
+    registerSlice(*voronoiMapOutside, binary_image->domain(), slice,axis, false,subSample);
+    
+    if (screenshots)
+      polyscope::screenshot();
+  }
   
   
 }
