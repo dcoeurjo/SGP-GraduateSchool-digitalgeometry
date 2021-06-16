@@ -31,14 +31,13 @@ void oneStep(double myh)
 {
   auto params = SH3::defaultParameters();
   params( "polynomial", "sphere1" )( "gridstep", myh )
-    ( "minAABB", -1.25 )( "maxAABB", 1.25 );
+        ( "minAABB", -1.25 )( "maxAABB", 1.25 );
   auto implicit_shape  = SH3::makeImplicitShape3D  ( params );
   auto digitized_shape = SH3::makeDigitizedImplicitShape3D( implicit_shape, params );
   
   QuickHull3D hull;
   
   std::vector<Point> points;
-
   std::cout << "Digitzing shape" << std::endl;
   auto domain = digitized_shape->getDomain();
   for(auto &p: domain)
@@ -49,15 +48,15 @@ void oneStep(double myh)
   hull.setInput( points );
   hull.computeConvexHull();
   std::cout << "#points="    << hull.nbPoints()
-  << " #vertices=" << hull.nbVertices()
-  << " #facets="   << hull.nbFacets() << std::endl;
+           << " #vertices=" << hull.nbVertices()
+           << " #facets="   << hull.nbFacets() << std::endl;
   
-  std::vector< RealPoint > positions;
-  hull.getVertexPositions( positions );
+  std::vector< RealPoint > vertices;
+  hull.getVertexPositions( vertices );
   std::vector< std::vector< std::size_t > > facets;
   hull.getFacetVertices( facets );
   
-  polyscope::registerSurfaceMesh("Convex hull", positions, facets)->rescaleToUnit();
+  polyscope::registerSurfaceMesh("Convex hull", vertices, facets)->rescaleToUnit();
 }
 
 float deltah=0.005;
