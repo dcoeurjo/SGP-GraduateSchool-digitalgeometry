@@ -30,19 +30,22 @@ float h=0.25;
 void oneStep(double myh)
 {
   auto params = SH3::defaultParameters();
-  params( "polynomial", "sphere1" )( "gridstep", myh );
+  params( "polynomial", "sphere1" )( "gridstep", myh )
+    ( "minAABB", -1.25 )( "maxAABB", 1.25 );
   auto implicit_shape  = SH3::makeImplicitShape3D  ( params );
   auto digitized_shape = SH3::makeDigitizedImplicitShape3D( implicit_shape, params );
   
   QuickHull3D hull;
   
   std::vector<Point> points;
-  
+
+  std::cout << "Digitzing shape" << std::endl;
   auto domain = digitized_shape->getDomain();
   for(auto &p: domain)
     if (digitized_shape->operator()(p))
       points.push_back(p);
   
+  std::cout << "Computing convex hull" << std::endl;
   hull.setInput( points );
   hull.computeConvexHull();
   std::cout << "#points="    << hull.nbPoints()
@@ -58,10 +61,12 @@ void oneStep(double myh)
 }
 
 float deltah=0.005;
+float deltac=31.0/32.0;
 void mycallback()
 {
   ImGui::SliderFloat("h", &h, 0.0, 0.5);
   ImGui::SliderFloat("deltah", &deltah, 0.0, 0.1);
+  ImGui::SliderFloat("deltac", &deltac, 0.0, 1.0);
   if (ImGui::Button("Run"))
   {
     oneStep(h);
@@ -70,6 +75,16 @@ void mycallback()
   {
     for(auto hh=h; hh > 0.01; hh=hh-deltah)
     {
+      oneStep(hh);
+      polyscope::screenshot();
+      polyscope::refresh();
+    }
+  }
+  if (ImGui::Button("Screenshots (mult)"))
+  {
+    for(auto hh=h; hh > 0.01; hh *= deltac)
+    {
+      std::cout << "gridstep = " << hh << std::endl;
       oneStep(hh);
       polyscope::screenshot();
       polyscope::refresh();
