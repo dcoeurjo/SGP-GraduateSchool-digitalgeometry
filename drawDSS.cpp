@@ -38,7 +38,7 @@ int main(int argc, char **argv)
   Domain domain(Point(0,0),Point(30,10));
   
   // Construct a standard DSL from a, b, mu
-  StandardDSL<Integer> line( 2, 5, 0 );
+  NaiveDSL<Integer> line( 2, 5, 0 );
   
   board << domain;
   
@@ -53,7 +53,7 @@ int main(int argc, char **argv)
   
   board << SetMode( b.className(), "Paving" );
   // Draw the DSL points between firstPoint and lastPoint
-  for ( auto it = line.begin(a), ite = line.end(b); it != ite; ++it )
+  for ( auto it = line.begin(a); (*it)[0]<= 30; ++it )
     board << *it; //Draw the point
   board.setLineWidth(2.0);
   board.setPenColor(Color::Red);
@@ -76,7 +76,7 @@ int main(int argc, char **argv)
       case 7: return Color::Yellow;
     }  };
   auto cpt=0;
-  for ( auto it = line.begin(a), ite = line.end(b); it != ite; ++it, ++cpt )
+  for ( auto it = line.begin(a); (*it)[0]<= 30; ++it, ++cpt )
   {
     auto color = mycol(cpt);
     std::cout<<color<<std::endl;
