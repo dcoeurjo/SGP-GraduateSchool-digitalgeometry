@@ -80,7 +80,8 @@ int main(int argc, char **argv)
   {
     auto color = mycol(cpt);
     std::cout<<color<<std::endl;
-    board << CustomStyle( it->  className(), new Style( color,color ) )
+    board.setFillColor( Color::Blue );
+    board << CustomStyle( it->  className()+"/Paving", new Style( color,color ) )
           << *it; //Draw the point
    }
   board.saveEPS("drawDSS-3.eps");

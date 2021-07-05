@@ -60,7 +60,7 @@ void oneStep(double myh)
 }
 
 float deltah=0.005;
-float deltac=31.0/32.0;
+float deltac=63.0/64.0;
 void mycallback()
 {
   ImGui::SliderFloat("h", &h, 0.0, 0.5);
