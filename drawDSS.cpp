@@ -41,8 +41,8 @@ int main(int argc, char **argv)
   board << domain;
   
   Point a(0,0);
-  Point b(28,10);
-  board.setLineWidth(2.0);
+  Point b(27,10);
+  board.setLineWidth(4.0);
   board.setPenColor(Color::Red);
   board.setLineStyle(LibBoard::Shape::SolidStyle);
   board.drawLine(a[0], a[1], b[0], b[1]);
@@ -67,8 +67,8 @@ int main(int argc, char **argv)
       case 1: return Color::Blue;
       case 2: return Color::Gray;
       case 3: return Color::Green;
-      case 4: return Color::Purple;
-      case 5: return Color::Lime;
+      case 4: return Color::Navy;
+      case 5: return Color::Magenta;
       case 6: return Color::Yellow;
     }  };
   auto cpt=0;
