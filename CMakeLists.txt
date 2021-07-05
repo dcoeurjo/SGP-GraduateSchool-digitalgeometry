@@ -14,7 +14,9 @@ set(SRCs
    simpleTest
    dt
    quickhull
-   geodiff)
+   shapes
+   geodiff
+   drawDSS)
 
 foreach(src ${SRCs})
   add_executable(${src} ${src}.cpp)
