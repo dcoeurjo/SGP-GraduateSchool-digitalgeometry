@@ -20,6 +20,7 @@ set(SRCs
    drawDSS
    digital-topology
    homotopic-thinning
+   primal-dual
    )
 
 foreach(src ${SRCs})
