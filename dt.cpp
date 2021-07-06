@@ -230,7 +230,7 @@ void myCallback()
     auto psrdma = polyscope::registerPointCloud("RDMA", centers);
     auto q= psrdma->addScalarQuantity("radius", radii);
     psrdma->setPointRadiusQuantity(q,false);
-    scaleAxis += 0.01;
+    scaleAxis += 0.05;
     
     if (screenshots)
       polyscope::screenshot();
