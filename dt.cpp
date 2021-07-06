@@ -65,11 +65,11 @@ void registerSlice(const Image& image, const Domain &domain,
   std::vector<Point> vertices(width1*width2);
   std::vector<double> values(width1*width2);
   std::vector<unsigned int> sites(width1*width2);
-  std::vector<std::array<unsigned int,4>> faces(width1*width2*2);
+  std::vector<std::array<unsigned int,4>> faces(width1*width2);
 
   std::vector<Point> grid;
   std::vector<double> radii;
-  
+  auto cptF=0;
   for(auto v = domain.lowerBound()[dim2]; v <= domain.upperBound()[dim2] ; ++v )
   {
     for(auto u = domain.lowerBound()[dim1]; u <= domain.upperBound()[dim1] ; ++u )
@@ -106,7 +106,7 @@ void registerSlice(const Image& image, const Domain &domain,
   
   auto psm = polyscope::registerSurfaceMesh("Slice", vertices, faces);
   psm->addVertexDistanceQuantity("DT", values);
-  psm->addVertexScalarQuantity("Sites", sites);
+  psm->addFaceScalarQuantity("Sites", sites);
   if (inner)
   {
     auto pspcl= polyscope::registerPointCloud("Balls", grid);
