@@ -32,7 +32,6 @@ std::default_random_engine generator;
 
 void oneStep()
 {
-  
   std::normal_distribution<double> distribution(0,width/4.0);
 
   QuickHull3D hull;
