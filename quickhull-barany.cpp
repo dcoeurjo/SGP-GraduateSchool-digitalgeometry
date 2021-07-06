@@ -2,6 +2,7 @@
 #include <vector>
 #include <array>
 #include <utility>
+#include <random>
 
 #include <DGtal/base/Common.h>
 #include <DGtal/helpers/StdDefs.h>
@@ -27,25 +28,37 @@ typedef DGtal::QuickHull< Kernel3D >         QuickHull3D;
 
 float h=0.25;
 
+
+float deltah=0.005;
+float deltac=63.0/64.0;
+int width=10;
+int nbpts=100;
+std::default_random_engine generator;
+
 void oneStep(double myh)
 {
-  auto params = SH3::defaultParameters();
-  params( "polynomial", "sphere1" )( "gridstep", myh )
-        ( "minAABB", -1.25 )( "maxAABB", 1.25 );
-  auto implicit_shape  = SH3::makeImplicitShape3D  ( params );
-  auto digitized_shape = SH3::makeDigitizedImplicitShape3D( implicit_shape, params );
   
-  
+  std::normal_distribution<double> distribution(0,width/4.0);
+
+  QuickHull3D hull;
+  std::vector<Point> pointsgrid;
+  for(auto i=-width;i <= width;++i)
+    for(auto j=-width;j <= width;++j)
+      for(auto k=-width;k <= width;++k)
+        pointsgrid.push_back(Point(i,j,k));
+        
   std::vector<Point> points;
   std::cout << "Digitzing shape" << std::endl;
-  auto domain = digitized_shape->getDomain();
-  for(auto &p: domain)
-    if (digitized_shape->operator()(p))
-      points.push_back(p);
+  Domain dom(Point(-width,-width,-width),Point(width,width,width));
   
+  for(auto i=0; i < nbpts; ++i)
+  {
+    Point p(distribution(generator),distribution(generator),distribution(generator));
+    if (!dom.isInside(p)) continue;
+    points.push_back(p);
+  }
   
   std::cout << "Computing convex hull" << std::endl;
-  QuickHull3D hull;
   hull.setInput( points );
   hull.computeConvexHull();
   std::cout << "#points="    << hull.nbPoints()
@@ -57,16 +70,16 @@ void oneStep(double myh)
   std::vector< std::vector< std::size_t > > facets;
   hull.getFacetVertices( facets );
   
-  polyscope::registerSurfaceMesh("Convex hull", vertices, facets)->rescaleToUnit();
+  auto pp = polyscope::registerSurfaceMesh("Convex hull", vertices, facets);
+  polyscope::registerPointCloud("Grid", pointsgrid);
+
 }
 
-float deltah=0.005;
-float deltac=63.0/64.0;
 void mycallback()
 {
   ImGui::SliderFloat("h", &h, 0.0, 0.5);
-  ImGui::SliderFloat("deltah", &deltah, 0.0, 0.1);
-  ImGui::SliderFloat("deltac", &deltac, 0.0, 1.0);
+  ImGui::SliderInt("width", &width, 0, 100);
+  ImGui::SliderInt("nbpts", &nbpts, 0, 1000);
   if (ImGui::Button("Run"))
   {
     oneStep(h);
@@ -84,8 +97,7 @@ void mycallback()
   {
     for(auto hh=h; hh > 0.01; hh *= deltac)
     {
-      std::cout << "gridstep = " << hh << std::endl;
-      oneStep(hh);
+      oneStep(h);
       polyscope::screenshot();
       polyscope::refresh();
     }
