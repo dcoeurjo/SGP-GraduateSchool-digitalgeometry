@@ -14,6 +14,7 @@ set(SRCs
    simpleTest
    dt
    quickhull
+   quickhull-barany
    shapes
    geodiff
    drawDSS
