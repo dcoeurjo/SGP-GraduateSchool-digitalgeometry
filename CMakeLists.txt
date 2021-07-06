@@ -16,7 +16,10 @@ set(SRCs
    quickhull
    shapes
    geodiff
-   drawDSS)
+   drawDSS
+   digital-topology
+   homotopic-thinning
+   )
 
 foreach(src ${SRCs})
   add_executable(${src} ${src}.cpp)
