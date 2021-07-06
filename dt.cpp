@@ -120,6 +120,7 @@ bool toggle=false;
 bool toggle1D=false;
 int cpt=0;
 bool screenshots=false;
+float scaleAxis=1.0;
 
 void myCallback()
 {
@@ -142,6 +143,7 @@ void myCallback()
       registerSlice(*voronoiMap, binary_image->domain(), slice,axis,true,subSample);
   }
   
+  ImGui::SliderFloat("scale Axis", &scaleAxis, 1.0,2.0);
   if (ImGui::Button("RDMA"))
   {
     ImageContainerBySTLVector<Domain, uint64_t> squareDT(binary_image->domain());
@@ -149,7 +151,7 @@ void myCallback()
     {
       auto q = voronoiMap->operator()(p);
       if (p!=q)
-        squareDT.setValue(p, (p-q).squaredNorm());
+        squareDT.setValue(p, scaleAxis*scaleAxis*(p-q).squaredNorm());
     }
     typedef PowerMap<ImageContainerBySTLVector<Domain, uint64_t>, L2PowerMetric> PowerMapType;
     PowerMapType powermap(binary_image->domain(), squareDT, Z3i::l2PowerMetric);
@@ -161,7 +163,7 @@ void myCallback()
       if (rdma(p) != 0)
       {
         centers.push_back(p);
-        radii.push_back(std::sqrt(rdma(p)) - 0.5);
+        radii.push_back(1.0/scaleAxis*std::sqrt(rdma(p)) );
       }
     }
     auto psrdma = polyscope::registerPointCloud("RDMA", centers);
