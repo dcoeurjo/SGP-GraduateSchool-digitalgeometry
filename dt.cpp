@@ -117,6 +117,7 @@ void registerSlice(const Image& image, const Domain &domain,
 
 
 bool toggle=false;
+bool toggleScale=false;
 bool toggle1D=false;
 int cpt=0;
 bool screenshots=false;
@@ -194,6 +195,42 @@ void myCallback()
     if (slice > binary_image->domain().upperBound()[axis])
       toggle1D = !toggle1D;
     registerSlice(*voronoiMapOutside, binary_image->domain(), slice,axis, false,subSample);
+    
+    if (screenshots)
+      polyscope::screenshot();
+  }
+  
+  if (ImGui::Button("Toggle Scale"))
+    toggleScale = !toggleScale;
+  if((toggleScale) )//&& (cpt%2==1))
+  {
+    
+    if (scaleAxis > 10.0)
+      toggleScale = !toggleScale;
+    ImageContainerBySTLVector<Domain, uint64_t> squareDT(binary_image->domain());
+    for(auto p: binary_image->domain())
+    {
+      auto q = voronoiMap->operator()(p);
+      if (p!=q)
+        squareDT.setValue(p, scaleAxis*scaleAxis*(p-q).squaredNorm());
+    }
+    typedef PowerMap<ImageContainerBySTLVector<Domain, uint64_t>, L2PowerMetric> PowerMapType;
+    PowerMapType powermap(binary_image->domain(), squareDT, Z3i::l2PowerMetric);
+    auto rdma = ReducedMedialAxis<PowerMapType>::getReducedMedialAxisFromPowerMap(powermap);
+    std::vector<Point> centers;
+    std::vector<double> radii;
+    for(auto &p: rdma.domain())
+    {
+      if (rdma(p) != 0)
+      {
+        centers.push_back(p);
+        radii.push_back(1.0/scaleAxis*std::sqrt(rdma(p)) );
+      }
+    }
+    auto psrdma = polyscope::registerPointCloud("RDMA", centers);
+    auto q= psrdma->addScalarQuantity("radius", radii);
+    psrdma->setPointRadiusQuantity(q,false);
+    scaleAxis += 0.01;
     
     if (screenshots)
       polyscope::screenshot();
