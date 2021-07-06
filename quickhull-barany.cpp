@@ -10,11 +10,9 @@
 #include <DGtal/helpers/ShortcutsGeometry.h>
 #include "DGtal/geometry/tools/QuickHull.h"
 
-
 #include "polyscope/polyscope.h"
 #include "polyscope/point_cloud.h"
 #include "polyscope/surface_mesh.h"
-
 
 using namespace DGtal;
 using namespace Z3i;
@@ -26,16 +24,13 @@ typedef ShortcutsGeometry<Z3i::KSpace> SHG3;
 typedef DGtal::ConvexHullIntegralKernel< 3 > Kernel3D;
 typedef DGtal::QuickHull< Kernel3D >         QuickHull3D;
 
-float h=0.25;
-
-
 float deltah=0.005;
 float deltac=63.0/64.0;
 int width=10;
 int nbpts=100;
 std::default_random_engine generator;
 
-void oneStep(double myh)
+void oneStep()
 {
   
   std::normal_distribution<double> distribution(0,width/4.0);
@@ -75,20 +70,20 @@ void oneStep(double myh)
 
 }
 
+double h=0.25;
 void mycallback()
 {
-  ImGui::SliderFloat("h", &h, 0.0, 0.5);
   ImGui::SliderInt("width", &width, 0, 100);
   ImGui::SliderInt("nbpts", &nbpts, 0, 1000);
   if (ImGui::Button("Run"))
   {
-    oneStep(h);
+    oneStep();
   }
   if (ImGui::Button("Screenshots"))
   {
     for(auto hh=h; hh > 0.01; hh=hh-deltah)
     {
-      oneStep(hh);
+      oneStep();
       polyscope::screenshot();
       polyscope::refresh();
     }
@@ -97,7 +92,7 @@ void mycallback()
   {
     for(auto hh=h; hh > 0.01; hh *= deltac)
     {
-      oneStep(h);
+      oneStep();
       polyscope::screenshot();
       polyscope::refresh();
     }
