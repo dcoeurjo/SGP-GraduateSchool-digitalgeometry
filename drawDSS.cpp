@@ -54,7 +54,7 @@ int main(int argc, char **argv)
     board << *it; //Draw the point
   board.setLineWidth(4.0);
   board.setPenColor(Color::Red);
-  board.setLineStyle(LibBoard::Shape::SolidStyle);<
+  board.setLineStyle(LibBoard::Shape::SolidStyle);
   board.drawLine(a[0], a[1], b[0], b[1]);
   board.saveEPS("drawDSS-2.eps");
   
@@ -62,14 +62,16 @@ int main(int argc, char **argv)
   board.clear();
   board << domain;
   // Draw the DSL points between firstPoint and lastPoint
-  auto mycol=[](unsigned int i){ switch(i / 5){
-      case 0: return Color::Red;
-      case 1: return Color::Blue;
-      case 2: return Color::Gray;
-      case 3: return Color::Green;
-      case 4: return Color::Navy;
-      case 5: return Color::Magenta;
-      case 6: return Color::Yellow;
+  auto mycol=[](unsigned int i)
+  { switch(i / 5) {
+    case 0: return Color::Red;
+    case 1: return Color::Blue;
+    case 2: return Color::Gray;
+    case 3: return Color::Green;
+    case 4: return Color::Navy;
+    case 5: return Color::Magenta;
+    case 6: return Color::Yellow;
+    default: return Color::Black;
     }  };
   auto cpt=0;
   for ( auto it = line.begin(a); (*it)[0]<= 30; ++it, ++cpt )

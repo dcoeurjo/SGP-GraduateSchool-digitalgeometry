@@ -89,14 +89,14 @@ void mycallback()
 {
   if (ImGui::Button("Run"))
     {
-      oneStep();
+      oneStep( the_object );
     }
   if (ImGui::Button("Screenshots"))
     {
       bool finished = false;
       while ( ! finished )
         {
-          finished = oneStep();
+          finished = oneStep( the_object );
           polyscope::screenshot();
           polyscope::refresh();
         }
