@@ -26,7 +26,7 @@ typedef Shortcuts<Z3i::KSpace>         SH3;
 typedef ShortcutsGeometry<Z3i::KSpace> SHG3;
 
 CountedPtr< SH3::BinaryImage > binary_image;
-CountedPtr< Z3i::Object26_6 >  object;
+CountedPtr< Z3i::Object26_6 >  the_object;
 
 /// Register to polyscope the boundary surfels of a given binary image
 /// \a bimage.
@@ -59,9 +59,8 @@ void registerDigitalSurface( CountedPtr< SH3::BinaryImage > bimage,
 }
 
 // Removes a peel of simple points onto voxel object.
-bool oneStep()
+bool oneStep( CountedPtr< Z3i::Object26_6 > object )
 {
-  DigitalSet::Iterator it, itE;
   DigitalSet & S = object->pointSet();
   std::queue< Point > Q;
   for ( auto&& p : S )
@@ -128,8 +127,8 @@ int main( int argc, char* argv[] )
   Z3i::DigitalSet voxel_set( domain );
   for ( auto p : domain )
     if ( (*binary_image)( p ) ) voxel_set.insertNew( p );
-  object = CountedPtr< Z3i::Object26_6 >( new Z3i::Object26_6( dt26_6, voxel_set ) );
-  object->setTable(functions::loadTable<3>(simplicity::tableSimple26_6));
+  the_object = CountedPtr< Z3i::Object26_6 >( new Z3i::Object26_6( dt26_6, voxel_set ) );
+  the_object->setTable(functions::loadTable<3>(simplicity::tableSimple26_6));
 
   // Give the hand to polyscope
   polyscope::state::userCallback = mycallback;

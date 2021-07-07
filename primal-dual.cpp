@@ -75,50 +75,10 @@ void registerPolygonalSurface
     ->setEdgeWidth(2.0)->setEdgeColor({1.,0.,0.});
 }
 
-// Removes a peel of simple points onto voxel object.
-// bool oneStep()
-// {
-//   DigitalSet::Iterator it, itE;
-//   DigitalSet & S = object->pointSet();
-//   std::queue< Point > Q;
-//   for ( auto&& p : S )
-//     if ( object->isSimple( p ) )
-//       Q.push( p );
-//   int nb_simple = 0;
-//   while ( ! Q.empty() )
-//     {
-//       const auto p = Q.front();
-//       Q.pop();
-//       if ( object->isSimple( p ) )
-//         {
-//           S.erase( p );
-//           binary_image->setValue( p, false );
-//           ++nb_simple;
-//         }
-//     }
-//   trace.info() << "Removed " << nb_simple << " / " << S.size()
-//                << " points." << std::endl;
-//   registerDigitalSurface( binary_image, "Thinned object" );
-//   return nb_simple == 0;
-// }
 
 // Polyscope GUI Callback
 void mycallback()
 {
-  // if (ImGui::Button("Run"))
-  //   {
-  //     oneStep();
-  //   }
-  // if (ImGui::Button("Screenshots"))
-  //   {
-  //     bool finished = false;
-  //     while ( ! finished )
-  //       {
-  //         finished = oneStep();
-  //         polyscope::screenshot();
-  //         polyscope::refresh();
-  //       }
-  //   }
 }
 
 // main program
@@ -152,21 +112,10 @@ int main( int argc, char* argv[] )
   auto primal_surface0  = SH3::makeLightDigitalSurface( binary_image, K, params );
   params( "surfelAdjacency", 1 );
   auto primal_surface1  = SH3::makeLightDigitalSurface( binary_image, K, params );
-  // auto grayscale_image = SH3::makeGrayScaleImage
-  //   ( binary_image,
-  //     [] ( bool v ) { return v ? (unsigned char) 1 : (unsigned char) 0; } );
   auto dual_surface0 = SH3::makeDualPolygonalSurface( primal_surface0 );
   auto dual_surface1 = SH3::makeDualPolygonalSurface( primal_surface1 );
   registerPolygonalSurface( dual_surface0, "Dual surface interior adjacency" );
   registerPolygonalSurface( dual_surface1, "Dual surface exterior adjacency" );
-  // std::vector< std::vector< std::size_t> > faces;
-  // std::vector< RealPoint > positions;
-  // for ( Vertex v = 0; v < dual_surface->nbVertices(); v++ )
-  //   positions.push_back( dual_surface->position( v ) );
-  // for ( Face f = 0; f < dual_surface->nbFaces(); f++ )
-  //   faces.push_back( dual_surface->verticesAroundFace( f ) );
-  // auto dualSurf = polyscope::registerSurfaceMesh( "Dual surface", positions, faces)
-  //   ->setEdgeWidth(1.0)->setEdgeColor({1.,1.,1.});
   // Give the hand to polyscope
   polyscope::state::userCallback = mycallback;
   polyscope::show();

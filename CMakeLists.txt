@@ -21,6 +21,7 @@ set(SRCs
    digital-topology
    homotopic-thinning
    primal-dual
+   primal-hausdorff
    )
 
 foreach(src ${SRCs})
