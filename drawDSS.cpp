@@ -33,7 +33,7 @@ int main(int argc, char **argv)
 {
   
   Board2D board;
-  Domain domain(Point(0,0),Point(27,10));
+  Domain domain(Point(0,0),Point(30,12));
   
   // Construct a standard DSL from a, b, mu
   NaiveDSL<Integer> line( 2, 5, 0 );
@@ -41,7 +41,7 @@ int main(int argc, char **argv)
   board << domain;
   
   Point a(0,0);
-  Point b(27,10);
+  Point b(30,12);
   board.setLineWidth(4.0);
   board.setPenColor(Color::Red);
   board.setLineStyle(LibBoard::Shape::SolidStyle);
@@ -50,11 +50,11 @@ int main(int argc, char **argv)
 
   
   // Draw the DSL points between firstPoint and lastPoint
-  for ( auto it = line.begin(a); (*it)[1]<= 10; ++it )
+  for ( auto it = line.begin(a); (*it)[0]<= 30; ++it )
     board << *it; //Draw the point
   board.setLineWidth(4.0);
   board.setPenColor(Color::Red);
-  board.setLineStyle(LibBoard::Shape::SolidStyle);
+  board.setLineStyle(LibBoard::Shape::SolidStyle);<
   board.drawLine(a[0], a[1], b[0], b[1]);
   board.saveEPS("drawDSS-2.eps");
   
@@ -72,7 +72,7 @@ int main(int argc, char **argv)
       case 6: return Color::Yellow;
     }  };
   auto cpt=0;
-  for ( auto it = line.begin(a); (*it)[1]<= 10; ++it, ++cpt )
+  for ( auto it = line.begin(a); (*it)[0]<= 30; ++it, ++cpt )
   {
     board << CustomStyle( it->  className(), new Style( mycol(cpt) ) )
           << *it; //Draw the point
