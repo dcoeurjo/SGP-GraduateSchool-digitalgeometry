@@ -16,8 +16,7 @@ images / animations (using [DGtal](https://dgtal.org)).
 Just clone this repository and its submodules:
 
 ```
-git clone
-https://github.com/dcoeurjo/SGP-GraduateSchool-digitalgeometry.git
+git clone https://github.com/dcoeurjo/SGP-GraduateSchool-digitalgeometry.git
 git submodule update  --recursive --init
 ```
 
