@@ -25,7 +25,7 @@ set(SRCs
    )
 
 foreach(src ${SRCs})
-  add_executable(${src} ${src}.cpp)
+  add_executable(${src} "${PROJECT_SOURCE_DIR}/src/${src}.cpp")
   target_link_libraries(${src} polyscope DGtal ${DGTAL_LIBRARIES})
 endforeach()
 
