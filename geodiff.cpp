@@ -51,7 +51,7 @@ void oneStep(double h)
   digsurf->setEdgeColor({1.,1.,1.});
   
   //Computing some differential quantities
-  params("r-radius", 5*std::pow(h,-2.0/3.0));
+  params("r-radius", 3*std::pow(h,-2.0/3.0));
   //auto normalsII = SHG3::getIINormalVectors(binary_image, surfels, params);
   auto Mcurv     = SHG3::getIIMeanCurvatures(binary_image, surfels, params);
   
