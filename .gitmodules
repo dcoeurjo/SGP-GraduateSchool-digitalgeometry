@@ -1,6 +1,6 @@
 [submodule "deps/DGtal"]
-	path = deps/DGtal
+	path = src/deps/DGtal
 	url = https://github.com/DGtal-team/DGtal.git
 [submodule "deps/polyscope"]
-	path = deps/polyscope
+	path = src/deps/polyscope
 	url = https://github.com/nmwsharp/polyscope.git

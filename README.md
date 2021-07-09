@@ -35,3 +35,9 @@ make
 *Note*: to compile DGtal, you would need [boost](boost.org) (only
  headers) and  [zlib](https://www.zlib.net). The project heavily uses [polyscope](http://polyscope.run) for the visualization and UI.
 
+
+## Authors
+
+
+* [David Coeurjolly](http://perso.liris.cnrs.fr/david.coeurjolly)
+* [Jacques-Olivier Lachaud](http://www.lama.univ-savoie.fr/pagesmembres/lachaud/People/LACHAUD-JO/person.html)
