@@ -88,7 +88,7 @@ int main( int argc, char* argv[] )
 
   CLI::App app{"Homotopic Thinning demo"};
   std::string poly_string;
-  double      gridstep;
+  double      gridstep = 1.0;
   app.add_option("-p,--polynomial,1", poly_string, "a shape described as a polynomial like x^2+y^2-z^2-5")->required();
   app.add_option("-g,--gridstep,1", gridstep, "specifies the digitization grid step" );
   CLI11_PARSE(app,argc,argv);
