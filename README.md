@@ -3,7 +3,9 @@
 This repository contains material for the "Digtial Geometry" talk at
 the
 [Graduate School](https://sgp2021.github.io/program/#graduate-school) of the
-[Symposium on Geometry Processing](https://sgp2021.github.io).
+[Symposium on Geometry Processing](https://sgp2021.github.io). It
+contains the slides of the lecture and C++ codes used to generate the
+images / animations (using [DGtal](https://dgtal.org)).
 
 ![](https://raw.githubusercontent.com/dcoeurjo/SGP-GraduateSchool-digitalgeometry/main/img/bunny-geodesics.png)
 
