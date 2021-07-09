@@ -1,0 +1,22 @@
+name: C/C++ CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+     -  uses: actions/checkout@v1
+        with:
+          submodules: true
+          recursive: true
+     - run:  git submodule update --init --recursive
+     - run: |
+           sudo apt-get update
+           sudo apt-get install xorg-dev libglu1-mesa-dev libboost-dev libcgal-dev
+     - name: cmake
+       run: ls -l ; mkdir build; cd build ;  cmake ..
+     - name: make
+       run: cd build ; make
