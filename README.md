@@ -1,4 +1,5 @@
 # SGP-GraduateSchool-digitalgeometry
+[![C/C++ CI](https://github.com/dcoeurjo/SGP-GraduateSchool-digitalgeometry/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/dcoeurjo/SGP-GraduateSchool-digitalgeometry/actions/workflows/c-cpp.yml)
 
 This repository contains material for the "Digtial Geometry" talk at
 the
