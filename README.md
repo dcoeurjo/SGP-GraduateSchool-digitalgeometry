@@ -38,7 +38,11 @@ make
 *Note*: to compile DGtal, you would need [boost](boost.org) (only
  headers) and  [zlib](https://www.zlib.net). The project heavily uses [polyscope](http://polyscope.run) for the visualization and UI.
 
+# Slides
 
+* [Keynote](https://perso.liris.cnrs.fr/david.coeurjolly/talk/digital-geometry/GraduateSchool-DigitalGeometry.key)
+* [PDF export](https://perso.liris.cnrs.fr/david.coeurjolly/talk/digital-geometry/GraduateSchool-DigitalGeometry.pdf)
+ 
 ## Authors
 
 
