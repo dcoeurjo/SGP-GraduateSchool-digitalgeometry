@@ -25,8 +25,8 @@ git submodule update  --recursive --init
 ```
 
 
-Then you can compile the example file using (illustrated using linux/macOS
-Makefile target, check you `cmake` Generators for alternative platform):
+Then you can compile the files using `cmake/make` (using linux/macOS
+Makefile target, check you `cmake -h` Generators for alternative platform):
 
 ```
 mkdir build

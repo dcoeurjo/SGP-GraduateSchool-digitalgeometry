@@ -12,7 +12,7 @@ include_directories("${DGTAL_INCLUDE_DIRS}")
 
 set(SRCs
    simpleTest
-   dt
+   volumetric
    quickhull
    quickhull-barany
    shapes
