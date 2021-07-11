@@ -1,7 +1,7 @@
 # SGP-GraduateSchool-digitalgeometry
 [![C/C++ CI](https://github.com/dcoeurjo/SGP-GraduateSchool-digitalgeometry/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/dcoeurjo/SGP-GraduateSchool-digitalgeometry/actions/workflows/c-cpp.yml)
 
-This repository contains material for the "Digtial Geometry" talk at
+This repository contains material for the "Digital Geometry" talk at
 the
 [Graduate School](https://sgp2021.github.io/program/#graduate-school) of the
 [Symposium on Geometry Processing](https://sgp2021.github.io). It
@@ -39,7 +39,7 @@ make
  headers) and  [zlib](https://www.zlib.net). The project heavily uses [polyscope](http://polyscope.run) for the visualization and UI.
 
 
-## Authors
+# Authors
 
 
 * [David Coeurjolly](http://perso.liris.cnrs.fr/david.coeurjolly)
