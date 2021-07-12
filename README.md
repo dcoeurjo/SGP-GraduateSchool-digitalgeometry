@@ -50,6 +50,9 @@ make
 
 # Annotated bibliography
 
+| WARNING: Work in progress |
+| --- |
+
 ## Topology, preserving homotopy
 
 * [Bertrand94] Bertrand, Gilles. "Simple points, topological numbers and geodesic neighborhoods in cubic grids." Pattern recognition letters 15.10 (1994): 1003-1011.
@@ -91,4 +94,3 @@ make
 * [LRTC20] Lachaud, Jacques-Olivier, Pascal Romon, Boris Thibert, and David Coeurjolly. "Interpolated corrected curvature measures for polygonal surfaces." Computer Graphics Forum. Vol. 39. No. 5. 2020.
   - simple analytic formula of corrected normal current for triangulated and quadrangulated surfaces
 
-  
