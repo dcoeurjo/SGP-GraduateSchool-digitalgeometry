@@ -47,3 +47,23 @@ make
 
 * [David Coeurjolly](http://perso.liris.cnrs.fr/david.coeurjolly)
 * [Jacques-Olivier Lachaud](http://www.lama.univ-savoie.fr/pagesmembres/lachaud/People/LACHAUD-JO/person.html)
+
+# Annotated bibliography
+
+## Topology
+
+* [Bertrand94] Bertrand, Gilles. "Simple points, topological numbers and geodesic neighborhoods in cubic grids." Pattern recognition letters 15.10 (1994): 1003-1011.
+  - simple points in 2D/3D, easy definitions based on connected components of foreground / background
+ 
+* [BC94] Bertrand, Gilles, and Michel Couprie. "On parallel thinning algorithms: minimal non-simple sets, P-simple points and critical kernels." Journal of Mathematical Imaging and Vision 35.1 (2009): 23-35.
+
+* [YLJ18] Yan, Yajie, David Letscher, and Tao Ju. "Voxel cores: Efficient, robust, and provably good approximation of 3d medial axes." ACM Transactions on Graphics (TOG) 37.4 (2018): 1-13.
+
+* [LT16] Lachaud, Jacques-Olivier, and Boris Thibert. "Properties of gauss digitized shapes and digital surface integration." Journal of Mathematical Imaging and Vision 54.2 (2016): 162-180.
+
+* [LTC17] Lachaud, Jacques-Olivier, David Coeurjolly, and Jérémy Levallois. "Robust and convergent curvature and normal estimators with digital integral invariants." Modern Approaches to Discrete Curvature. Springer, Cham, 2017. 293-348.
+
+[LRTC20] Lachaud, Jacques-Olivier, Pascal Romon, Boris Thibert, and David Coeurjolly. "Interpolated corrected curvature measures for polygonal surfaces." Computer Graphics Forum. Vol. 39. No. 5. 2020.
+
+- homotopic thinning
+  
