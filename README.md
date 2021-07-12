@@ -50,14 +50,19 @@ make
 
 # Annotated bibliography
 
-## Topology
+## Topology, preserving homotopy
 
 * [Bertrand94] Bertrand, Gilles. "Simple points, topological numbers and geodesic neighborhoods in cubic grids." Pattern recognition letters 15.10 (1994): 1003-1011.
-  - simple points in 2D/3D, easy definitions based on connected components of foreground / background
+  - homotopic thinning on voxel shapes baded on simple points in 2D/3D, easy definitions based on connected components of foreground / background
+
+* [CB08] Couprie, Michel, and Gilles Bertrand. "New characterizations of simple points in 2D, 3D, and 4D discrete spaces." IEEE Transactions on Pattern Analysis and Machine Intelligence 31.4 (2008): 637-648.
+  - simple points up to 4D
  
 * [BC94] Bertrand, Gilles, and Michel Couprie. "On parallel thinning algorithms: minimal non-simple sets, P-simple points and critical kernels." Journal of Mathematical Imaging and Vision 35.1 (2009): 23-35.
+  - recall on critical kernels, and how they induce P-simple points, i.e. points that can be removed in parallel while preserving homotopy
 
 * [YLJ18] Yan, Yajie, David Letscher, and Tao Ju. "Voxel cores: Efficient, robust, and provably good approximation of 3d medial axes." ACM Transactions on Graphics (TOG) 37.4 (2018): 1-13.
+  - homotopy equivalence between a (smooth enough) shape and its voxelization, and definition of an homotopic medial axis (voxel core).
 
 * [LT16] Lachaud, Jacques-Olivier, and Boris Thibert. "Properties of gauss digitized shapes and digital surface integration." Journal of Mathematical Imaging and Vision 54.2 (2016): 162-180.
 
