@@ -50,6 +50,9 @@ make
 
 # Annotated bibliography
 
+| WARNING: Work in progress |
+| --- |
+
 ## Topology, preserving homotopy
 
 * [Bertrand94] Bertrand, Gilles. "Simple points, topological numbers and geodesic neighborhoods in cubic grids." Pattern recognition letters 15.10 (1994): 1003-1011.
