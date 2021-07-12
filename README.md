@@ -70,7 +70,7 @@ make
   - homotopy equivalence between a (smooth enough) shape and its voxelization,
   - definition of an homotopic medial axis (voxel core).
 
-## geometry of digitized surface vs continuous surface, multigrid convergence
+## Geometry of digitized surface vs continuous surface, multigrid convergence
 
 * [LT16] Lachaud, Jacques-Olivier, and Boris Thibert. "Properties of gauss digitized shapes and digital surface integration." Journal of Mathematical Imaging and Vision 54.2 (2016): 162-180.
   - hausdorff closeness between both continuous surface and digitized surface
@@ -94,3 +94,21 @@ make
 * [LRTC20] Lachaud, Jacques-Olivier, Pascal Romon, Boris Thibert, and David Coeurjolly. "Interpolated corrected curvature measures for polygonal surfaces." Computer Graphics Forum. Vol. 39. No. 5. 2020.
   - simple analytic formula of corrected normal current for triangulated and quadrangulated surfaces
 
+## Topology of digital surfaces
+
+* [Herman93] Herman, Gabor T. "Oriented surfaces in digital spaces." CVGIP: Graphical Models and Image Processing 55.5 (1993): 381-396.
+  - classic papers about digital surfaces
+  - consistency of boundaries with interior/exterior when using different topology for object/background
+  - digital surfaces can be tracked
+
+* [Udupa94] Udupa, Jayaram K. "Multidimensional digital boundaries." CVGIP: Graphical Models and Image Processing 56.4 (1994): 311-323.
+  - digital surfaces and boundaries in Z^d
+  - tracking algorithms
+
+* [LM00] Lachaud, Jacques-Olivier, and Annick Montanvert. "Continuous analogs of digital boundaries: A topological approach to iso-surfaces." Graphical models 62.3 (2000): 129-164.
+  - dual of digital surfaces is a "marching-cubes"-like isosurface
+  - combinatorial manifold isosurfaces in arbitrary dimension
+
+* [Lachaud03] Jacques-Olivier, Lachaud. "Coding cells of digital spaces: a framework to write generic digital topology algorithms." Electronic Notes in Discrete Mathematics 12 (2003): 337-348.
+  - the main basis for the topology modules of DGtal
+  - defines cells and boundary operators to visit digital objects and surfaces in Z^d
